@@ -41,6 +41,14 @@ export const useContractsData = () => {
     ...contracts.borrowToken,
     functionName: "decimals",
   });
+  const { data: healthThreshold } = useReadContract({
+    ...contracts.borrowFi,
+    functionName: "HEALTHY_THRESHOLD",
+  });
+  const { data: ratioDecimals } = useReadContract({
+    ...contracts.borrowFi,
+    functionName: "DECIMALS",
+  });
   const { data: availableBorrow, refetch: refetchAvailableBorrow } = useReadContract({
     ...contracts.borrowToken,
     functionName: "balanceOf",
@@ -86,6 +94,8 @@ export const useContractsData = () => {
     userBFI,
     cltDecimals,
     bfiDecimals,
+    healthThreshold,
+    ratioDecimals,
     availableBorrow,
     availableCLT,
     cltAllowance,

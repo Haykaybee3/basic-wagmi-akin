@@ -46,6 +46,8 @@ const Main = () => {
     userBFI,
     cltDecimals,
     bfiDecimals,
+    healthThreshold,
+    ratioDecimals,
     availableBorrow,
     availableCLT,
     cltAllowance,
@@ -53,7 +55,7 @@ const Main = () => {
     refetchAllVariables,
   } = useContractsData()
 
-  const { ltcRatio, isHealthy, borrowable } = useLend(userCollateral, userLoan, availableBorrow)
+  const { ltcRatio, isHealthy, borrowable } = useLend(userCollateral, userLoan, availableBorrow, healthThreshold as bigint | undefined, ratioDecimals as bigint | undefined)
 
   const {
     borrow: borrowBFI,
@@ -79,10 +81,12 @@ const Main = () => {
       if (currentCollateral < amount) return true
       const newCollateral = currentCollateral - amount
       if (newCollateral === BigInt(0)) return true
-      const projectedRatio = ((userLoan ?? BigInt(0)) * BigInt(10000)) / newCollateral
-      if (projectedRatio >= 7000) return true
+      const decimals = (ratioDecimals as bigint | undefined) ?? BigInt(10000)
+      const threshold = (healthThreshold as bigint | undefined) ?? BigInt(7000)
+      const projectedRatio = ((userLoan ?? BigInt(0)) * decimals) / newCollateral
+      if (projectedRatio >= threshold) return true
       return false
-  }, [withdrawInput, userCollateral, userLoan])
+  }, [withdrawInput, userCollateral, userLoan, healthThreshold, ratioDecimals])
 
   const withdrawWarning = useMemo(() => {
       const amount = parseEther(withdrawInput || "0")
@@ -90,10 +94,12 @@ const Main = () => {
       if (amount === BigInt(0) || currentCollateral < amount) return ""
       const newCollateral = currentCollateral - amount
       if (newCollateral === BigInt(0)) return "Health breach: Can't have 0 collateral"
-      const projectedRatio = ( (userLoan ?? BigInt(0)) * BigInt(10000) ) / newCollateral
-      if (projectedRatio >= 7000) return "Health breach: Can't have 0 collateral"
+      const decimals = (ratioDecimals as bigint | undefined) ?? BigInt(10000)
+      const threshold = (healthThreshold as bigint | undefined) ?? BigInt(7000)
+      const projectedRatio = ( (userLoan ?? BigInt(0)) * decimals ) / newCollateral
+      if (projectedRatio >= threshold) return "Health breach: Can't have 0 collateral"
       return ""
-  }, [withdrawInput, userCollateral, userLoan])
+  }, [withdrawInput, userCollateral, userLoan, healthThreshold, ratioDecimals])
 
     
 
