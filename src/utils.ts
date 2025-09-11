@@ -13,6 +13,10 @@ export const getParsedError = (error: any): string => {
 
     const parsedError = error?.walk ? error.walk() : error;
 
+    if (parsedError?.code === 4001) return "Transaction rejected";
+    if (/UserRejectedRequestError/i.test(parsedError?.name || "")) return "Transaction rejected";
+    if (/user rejected/i.test(parsedError?.message || "")) return "Transaction rejected";
+
     if (parsedError instanceof BaseViemError) {
         if (parsedError.details) {
             return parsedError.details;

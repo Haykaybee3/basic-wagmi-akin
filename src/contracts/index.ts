@@ -11,15 +11,15 @@ type TContracts = Record<
 
 const contracts = {
   borrowFi: {
-    address: "0x31c14fcbD235bf3617EcA5a3A548f7F000d61eC0",
+    address: "0x306b3300A32C023d13D0846DD6Ffb4f5dfa89643",
     abi: borrowFiAbi,
   },
   cltToken: {
-    address: "0x38cd4AA34a495f6ACA8b04401860F82C93563F99",
+    address: "0x2593ef305026896ACD54b8E2Ef15d5a7D69F4D65",
     abi: erc20Abi,
   },
   borrowToken: {
-    address: "0x10EB53ea44C9A493874cE0279b8Db9C460f3EfA4",
+    address: "0xE4A344e73188C792Ea7e273a1BA0406f09350024",
     abi: erc20Abi,
   },
 } as const satisfies TContracts;
