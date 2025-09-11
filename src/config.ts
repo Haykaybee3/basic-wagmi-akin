@@ -1,10 +1,14 @@
 import { mainnet, sepolia } from "viem/chains";
-import { createConfig, http } from "wagmi";
+import { cookieStorage, createStorage } from "wagmi";
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 
-export const config = createConfig({
+export const config = getDefaultConfig({
+  appName: "BorrowFI",
+  projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? "demo",
   chains: [sepolia, mainnet],
-  transports: {
-    [sepolia.id]: http(),
-    [mainnet.id]: http(),
-  },
+  ssr: true,
+  storage: createStorage({ storage: cookieStorage }),
 });
+
+export const client = config.getClient();
+
